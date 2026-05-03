@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Needed for ACTION_OPEN_DOCUMENT (no INTERNET required) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <application
+        android:name=".PhotosApp"
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Photos"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".ui.HomeActivity"
+            android:exported="true"
+            android:label="Photos">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.AlbumActivity"
+            android:label="Album"
+            android:parentActivityName=".ui.HomeActivity" />
+
+        <activity
+            android:name=".ui.PhotoDisplayActivity"
+            android:label="Photo"
+            android:parentActivityName=".ui.AlbumActivity" />
+
+        <activity
+            android:name=".ui.SearchActivity"
+            android:label="Search"
+            android:parentActivityName=".ui.HomeActivity" />
+
+    </application>
+</manifest>
