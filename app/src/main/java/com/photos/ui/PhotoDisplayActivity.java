@@ -103,28 +103,30 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, types);
         spinner.setAdapter(spinnerAdapter);
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Add Tag")
                 .setView(dialogView)
-                .setPositiveButton("Add", (dialog, which) -> {
-                    String type  = (String) spinner.getSelectedItem();
-                    String value = valueEdit.getText().toString().trim();
-                    if (value.isEmpty()) {
-                        Toast.makeText(this, "Value cannot be empty", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Tag tag = new Tag(type, value);
-                    Photo photo = photos.get(currentIndex);
-                    if (photo.getTags().contains(tag)) {
-                        Toast.makeText(this, "Tag already exists", Toast.LENGTH_SHORT).show();
-                    } else {
-                        photo.addTag(tag);
-                        PhotosApp.getInstance().save();
-                        displayCurrent();
-                    }
-                })
+                .setPositiveButton("Add", null)
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b -> {
+            String type = (String) spinner.getSelectedItem();
+            String value = valueEdit.getText().toString().trim();
+            if (value.isEmpty()) {
+                Toast.makeText(this, "Value cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Tag tag = new Tag(type, value);
+            Photo photo = photos.get(currentIndex);
+            if (photo.getTags().contains(tag)) {
+                Toast.makeText(this, "Tag already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                photo.addTag(tag);
+                PhotosApp.getInstance().save();
+                displayCurrent();
+            }
+        });
     }
 
     private void showDeleteTagDialog() {

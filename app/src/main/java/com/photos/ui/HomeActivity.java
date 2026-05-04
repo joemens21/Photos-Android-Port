@@ -83,25 +83,28 @@ public class HomeActivity extends AppCompatActivity {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setHint("Album name");
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Create Album")
                 .setView(input)
-                .setPositiveButton("Create", (dialog, which) -> {
-                    String name = input.getText().toString().trim();
-                    if (name.isEmpty()) {
-                        Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (user.getAlbumByName(name) != null) {
-                        Toast.makeText(this, "Album already exists", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    user.addAlbum(new Album(name));
-                    PhotosApp.getInstance().save();
-                    adapter.notifyDataSetChanged();
-                })
+                .setPositiveButton("Create", null)
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b -> {
+            String name = input.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (user.getAlbumByName(name) != null) {
+                Toast.makeText(this, "Album already exists", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            user.addAlbum(new Album(name));
+            PhotosApp.getInstance().save();
+            adapter.notifyDataSetChanged();
+            dialog.dismiss();
+        });
     }
 
     private void showAlbumOptions(Album album) {
@@ -120,26 +123,28 @@ public class HomeActivity extends AppCompatActivity {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(album.getName());
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Rename Album")
                 .setView(input)
-                .setPositiveButton("Rename", (dialog, which) -> {
-                    String name = input.getText().toString().trim();
-                    if (name.isEmpty()) {
-                        Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (!name.equalsIgnoreCase(album.getName()) &&
-                            user.getAlbumByName(name) != null) {
-                        Toast.makeText(this, "Album already exists", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    album.setName(name);
-                    PhotosApp.getInstance().save();
-                    adapter.notifyDataSetChanged();
-                })
+                .setPositiveButton("Rename", null)
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b -> {
+            String name = input.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!name.equalsIgnoreCase(album.getName()) &&
+                    user.getAlbumByName(name) != null) {
+                Toast.makeText(this, "Album already exists", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            album.setName(name);
+            PhotosApp.getInstance().save();
+            adapter.notifyDataSetChanged();
+        });
     }
 
     private void showDeleteConfirm(Album album) {
